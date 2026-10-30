@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import dev.diwer.equipment_rebalance.EquipmentRebalance;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -162,16 +163,17 @@ public final class ERConfig {
 			minXp = Math.max(minXp, 1);
 			int usesMin = orInt(repair, "table_uses_min", base.tableUsesMin, 0, 10000);
 			int usesMax = orInt(repair, "table_uses_max", base.tableUsesMax, usesMin, 100000);
-			boolean anvilRepair = bx(orNull(repair), "anvil_material_repair_allowed", base.anvilMaterialRepairEnabled);
+			boolean anvilRepair = bx(repair, "anvil_material_repair_allowed", base.anvilMaterialRepairEnabled);
 
 			JsonObject legacy = orNull(settings, "legacy_items");
-			ERConfigData.MendingBehavior mb = orEnum(orNull(legacy), "mending_legacy_behavior", base.mendingLegacyBehavior, ERConfigData.MendingBehavior.class);
-			boolean overWarn = bx(orNull(legacy), "over_capacity_warn", base.overCapacityWarn);
-			ERConfigData.OverCapacityBehavior over = orEnum(orNull(legacy), "over_capacity_behavior", base.overCapacityBehavior, ERConfigData.OverCapacityBehavior.class);
+			ERConfigData.MendingBehavior mb = orEnum(legacy, "mending_legacy_behavior", base.mendingLegacyBehavior, ERConfigData.MendingBehavior.class);
+			boolean overWarn = bx(legacy, "over_capacity_warn", base.overCapacityWarn);
+			ERConfigData.OverCapacityBehavior over = orEnum(legacy, "over_capacity_behavior", base.overCapacityBehavior, ERConfigData.OverCapacityBehavior.class);
 
 			JsonObject eco = orNull(ench, "enchantment_economy");
 			int[] levc = base.levelBaseCost;
-			JsonArray levcJson = orNull(eco) == null ? null : orNull(eco, "level_base_cost").isJsonArray() ? orNull(eco, "level_base_cost").getAsJsonArray() : null;
+			JsonElement leEl = eco == null ? null : eco.get("level_base_cost");
+			JsonArray levcJson = leEl != null && leEl.isJsonArray() ? leEl.getAsJsonArray() : null;
 			if (levcJson != null && levcJson.size() >= 10) {
 				int[] buf = new int[11];
 				for (int i = 1; i <= 10; i++) {
@@ -196,8 +198,8 @@ public final class ERConfig {
 			JsonObject norm = orNull(profiles, "normalization");
 			boolean normEnabled = bx(norm, "enabled", base.normalizeEnabled);
 			Map<String, ERConfigData.NormalizedArmorStats> nArmor = new HashMap<>(base.normalizedArmor);
-			if (orNull(norm) != null && orNull(norm, "armor_reference").isJsonObject()) {
-				for (var e : orNull(norm, "armor_reference").getAsJsonObject().entrySet()) {
+			if (norm != null && orNull(norm, "armor_reference") != null) {
+				for (var e : orNull(norm, "armor_reference").entrySet()) {
 					JsonObject v = e.getValue() != null && e.getValue().isJsonObject() ? e.getValue().getAsJsonObject() : null;
 					nArmor.put(e.getKey(), new ERConfigData.NormalizedArmorStats(
 							v == null ? null : nullableInt(v, "durability"),
@@ -206,8 +208,8 @@ public final class ERConfig {
 				}
 			}
 			Map<String, ERConfigData.NormalizedToolStats> nTools = new HashMap<>(base.normalizedTools);
-			if (orNull(norm) != null && orNull(norm, "tool_reference").isJsonObject()) {
-				for (var e : orNull(norm, "tool_reference").getAsJsonObject().entrySet()) {
+			if (norm != null && orNull(norm, "tool_reference") != null) {
+				for (var e : orNull(norm, "tool_reference").entrySet()) {
 					JsonObject v = e.getValue() != null && e.getValue().isJsonObject() ? e.getValue().getAsJsonObject() : null;
 					nTools.put(e.getKey(), new ERConfigData.NormalizedToolStats(
 							v == null ? null : nullableInt(v, "durability"),
@@ -219,9 +221,12 @@ public final class ERConfig {
 
 			// enchantment factors
 			Map<String, Double> mult = new HashMap<>(base.enchantMultipliers);
-			if (ench != null && ench.get("enchantment_multipliers").isJsonObject()) {
-				for (var e : ench.get("enchantment_multipliers").getAsJsonObject().entrySet()) {
-					if (e.getValue().isJsonPrimitive()) mult.put(e.getKey(), clampDouble(e.getValue().getAsDouble(), 0.0, 1000));
+			if (ench != null) {
+				JsonElement mEl = ench.get("enchantment_multipliers");
+				if (mEl != null && mEl.isJsonObject()) {
+					for (var e : mEl.getAsJsonObject().entrySet()) {
+						if (e.getValue().isJsonPrimitive()) mult.put(e.getKey(), clampDouble(e.getValue().getAsDouble(), 0.0, 1000));
+					}
 				}
 			}
 
