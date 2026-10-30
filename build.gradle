@@ -86,12 +86,19 @@ tasks.register("apiDumpJar", Jar) {
 	description = "Packages API introspection dump into build/libs for CI artifact upload."
 	from(outDir) { include "*" }
 	archiveFileName = "api-dump.jar"
-	doFirst {
-		mkdir(layout.buildDirectory.dir("libs").get().asFile)
-		exec {
-			commandLine "bash", "${project.projectDir}/tools/api_dump.sh"
-			environment "CI_WORKSPACE": "build"
-		}
+	doLast {
+		libsDirProp.get().asFile.mkdirs()
+		def proc = new ProcessBuilder(["bash", projDir.toString() + "/tools/api_dump.sh"])
+		proc.directory(projDir)
+		proc.environment().put("CI_WORKSPACE", libsDirProp.get().asFile.parent)
+		proc.environment().put("CI_CLASSLIST", projDir.toString() + "/tools/api-dump-classes.txt")
+		proc.redirectErrorStream(true)
+		def pr = proc.start()
+		pr.inputStream.readLines().each { println it }
+		def code = pr.waitFor()
+		if (code != 0) println "api_dump.sh exited with $code (non-fatal, introspection only)"
 	}
 }
 tasks.named("jar") { finalizedBy "apiDumpJar" }
+def projDir = project.projectDir
+def libsDirProp = layout.buildDirectory.dir("libs")
