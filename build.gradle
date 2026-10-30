@@ -42,11 +42,6 @@ java {
 }
 
 jar {
-	inputs.property "projectName", project.name
-
-	from("LICENSE") {
-		rename { "${it}_${project.name}" }
-	}
 }
 
 // ---------------------------------------------------------------------------
@@ -59,6 +54,8 @@ jar {
 def outDir = layout.buildDirectory.dir("api-dump").get()
 
 tasks.register("printClasspath", DefaultTask) {
+	notCompatibleWithConfigurationCache("introspection dev tool")
+
 	group = "documentation"
 	description = "Dumps resolved compile classpath for CI javap dumps."
 	doLast {
