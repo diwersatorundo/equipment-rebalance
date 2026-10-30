@@ -331,7 +331,7 @@ public final class ERConfig {
 
 		private static Float nullableFloat(JsonObject o, String key) {
 			JsonElement el = o.get(key);
-			return el != null && el.isJsonPrimitive() ? clampDouble(el.getAsDouble(), -400, 400).floatValue() : null;
+			return el != null && el.isJsonPrimitive() ? (float) clampDouble(el.getAsDouble(), -400, 400) : null;
 		}
 
 		private static int clampInt(int v, int min, int max) {
