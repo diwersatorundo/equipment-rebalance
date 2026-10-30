@@ -47,15 +47,14 @@ jar {
 // ---------------------------------------------------------------------------
 // API introspection task (development tool, part of CI dump; safe to ignore).
 // Writes the resolved compile classpath of both source sets and the current
-// build info into build/api-classpath.txt so that CI can then run javap on
-// the Mojang-mapped vanilla + remapped Fabric API jars to validate mixin
-// targets against Minecraft 26.3.
+// build info into build/api-dump/api-classpath.txt so that CI can then run
+// javap on the Mojang-mapped vanilla + remapped Fabric API jars to validate
+// mixin targets against Minecraft 26.3.
 // ---------------------------------------------------------------------------
 def outDir = layout.buildDirectory.dir("api-dump").get()
 
 tasks.register("printClasspath", DefaultTask) {
 	notCompatibleWithConfigurationCache("introspection dev tool")
-
 	group = "documentation"
 	description = "Dumps resolved compile classpath for CI javap dumps."
 	doLast {
@@ -76,3 +75,23 @@ tasks.register("printClasspath", DefaultTask) {
 		println "Classpath dumped to ${p}"
 	}
 }
+
+// Packaging the dump as a jar so the repository's fixed CI upload pattern
+// (build/libs/*.jar) also carries it as an artifact.
+tasks.register("apiDumpJar", Jar) {
+	dependsOn "printClasspath"
+	onlyIf { System.getenv("GITHUB_ACTIONS") != null }
+	notCompatibleWithConfigurationCache("introspection dev tool")
+	group = "documentation"
+	description = "Packages API introspection dump into build/libs for CI artifact upload."
+	from(outDir) { include "*" }
+	archiveFileName = "api-dump.jar"
+	doFirst {
+		mkdir(layout.buildDirectory.dir("libs").get().asFile)
+		exec {
+			commandLine "bash", "${project.projectDir}/tools/api_dump.sh"
+			environment "CI_WORKSPACE": "build"
+		}
+	}
+}
+tasks.named("jar") { finalizedBy "apiDumpJar" }
