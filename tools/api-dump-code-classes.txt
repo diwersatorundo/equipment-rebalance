@@ -5,6 +5,8 @@ net.minecraft.world.inventory.EnchantmentMenu
 net.minecraft.world.inventory.AnvilMenu
 net.minecraft.world.item.enchantment.Enchantment
 net.minecraft.world.item.enchantment.EnchantmentHelper
-net.minecraft.core.component.DataComponentTypes
+net.minecraft.core.component.DataComponents
 net.minecraft.core.component.PatchedDataComponentMap
 net.minecraft.core.component.DataComponentMap$Builder
+net.minecraft.core.Holder
+net.minecraft.core.Holder$Reference
