@@ -39,6 +39,18 @@ while read -r cls; do
   } >> "$OUT/api-dump.txt"
 done < "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}"
 
+# bytecode dump for classes where field/invocation details matter
+: > "$OUT/api-code.txt"
+if [ -f tools/api-dump-code-classes.txt ]; then
+  while read -r cls; do
+    [ -z "$cls" ] && continue
+    case "$cls" in \#*) continue;; esac
+    echo "===== $cls =====" >> "$OUT/api-code.txt"
+    javap -classpath "$CP" -c -p "$cls" >> "$OUT/api-code.txt" 2>> "$OUT/code-missing.txt"
+    echo >> "$OUT/api-code.txt"
+  done < tools/api-dump-code-classes.txt
+fi
+
 {
   echo "===== fabric-api jar listings ====="
   for j in "${JARS[@]}"; do
@@ -84,6 +96,7 @@ done < "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}"
   echo "classes requested: $(grep -c '[^#[:space:]]' "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}" 2>/dev/null || echo '?')"
   echo "missing vanilla classes: $(grep -c 'Error' "$OUT/missing.txt" 2>/dev/null || echo 0)"
   echo "missing fabric classes: $(grep -c 'Error' "$OUT/fabric-missing.txt" 2>/dev/null || echo 0)"
+  echo "missing code-classes: $(grep -c 'Error' "$OUT/code-missing.txt" 2>/dev/null || echo 0)"
   echo
 } > "$OUT/SUMMARY.txt"
 echo "Introspection dump: $OUT/api-dump.txt ($(wc -l < "$OUT/api-dump.txt") lines)"

@@ -1,0 +1,10 @@
+net.minecraft.world.item.Item
+net.minecraft.world.item.ItemStack
+net.minecraft.world.level.block.entity.EnchantingTableBlockEntity
+net.minecraft.world.inventory.EnchantmentMenu
+net.minecraft.world.inventory.AnvilMenu
+net.minecraft.world.item.enchantment.Enchantment
+net.minecraft.world.item.enchantment.EnchantmentHelper
+net.minecraft.core.component.DataComponentTypes
+net.minecraft.core.component.PatchedDataComponentMap
+net.minecraft.core.component.DataComponentMap$Builder
