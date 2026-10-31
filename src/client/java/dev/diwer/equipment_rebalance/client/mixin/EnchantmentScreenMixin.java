@@ -30,7 +30,7 @@ public abstract class EnchantmentScreenMixin {
 		boolean on = RepairState.isRepairMode(mc.player.getUUID());
 		EnchantmentScreen self = (EnchantmentScreen) (Object) this;
 
-		Button built = ((ScreenInvokerMixin) (Object) this).equipment_rebalance$addRenderableWidgetInv(
+		Button built = ((ScreenInvokerMixin) (Object) this).callAddRenderableWidget(
 				Button.builder(Component.literal("Repair: " + (on ? "ON" : "OFF")), b -> {
 					Minecraft m = Minecraft.getInstance();
 					if (m.player == null) return;

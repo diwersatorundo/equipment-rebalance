@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(Screen.class)
 public interface ScreenInvokerMixin {
 
-	@Invoker(method = "addRenderableWidget")
-	public <T extends GuiEventListener & Renderable & NarratableEntry> T equipment_rebalance$addRenderableWidgetInv(T widget);
+	@Invoker("addRenderableWidget")
+	public <T extends GuiEventListener & Renderable & NarratableEntry> T callAddRenderableWidget(T widget);
 }
