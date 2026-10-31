@@ -52,43 +52,38 @@ done < "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}"
   done
 } >> "$OUT/api-dump.txt"
 
-# Extract nested fabric-api modules so we can javap API classes too.
-API_MODULES_DIR="$OUT/fabric-api-modules"
-rm -rf "$API_MODULES_DIR"; mkdir -p "$API_MODULES_DIR"
-for j in "${JARS[@]}"; do
-  case "$j" in
-    *fabric-api*) unzip -o -qq -j "$j" "jars/*.jar" -d "$API_MODULES_DIR" 2>/dev/null ;;
-  esac
-done
-# add extracted modules to a second classpath and dump the needed API classes
-MODCP=$(printf '%s\n' "$API_MODULES_DIR"/*.jar 2>/dev/null | grep -v '^\*' | paste -sd: -)
-MODCP="$(echo "$MODCP" | sed 's/ /\\ /g')"
+# fabric api classes live in the remapped per-module jars that are already on
+# $CP, so use the full classpath for them (no nested extraction needed).
 {
   echo "===== fabric-api module javap dumps ====="
-  if [ -n "${MODCP//\\ }" ]; then
-    for cls in $(cat tools/api-dump-fabric-classes.txt 2>/dev/null); do
-      {
-        echo "===== $cls ====="
-        javap -classpath "$MODCP" -p "$cls" 2>/dev/null
-        echo
-      }
-    done >> /tmp/er-fabric-dump.txt
-    cat /tmp/er-fabric-dump.txt >> "$OUT/api-dump.txt"
-  fi
-} 2>/dev/null
+  for cls in $(cat tools/api-dump-fabric-classes.txt 2>/dev/null); do
+    {
+      echo "===== $cls ====="
+      javap -classpath "$CP" -p "$cls" 2>> "$OUT/fabric-missing.txt"
+      echo
+    }
+  done
+} >> "$OUT/api-dump.txt"
 
 {
   echo "=== fabric api modules found ==="
-  ls -1 "$API_MODULES_DIR" 2>/dev/null
+  echo "-- direct classpath fabric jars:"
+  for j in "${JARS[@]}"; do
+    case "$j" in *fabric*) echo "$j" ;; esac
+  done
+  echo "-- nested fat-jar entries:"
+  for j in "${JARS[@]}"; do
+    case "$j" in *fabric-api*) unzip -l "$j" 2>/dev/null | grep -oE "(META-INF/jars/|jars/)fabric[a-z0-9._-]*\.jar" | sort -u ;; esac
+  done
 } >> "$OUT/api-dump.txt"
 
 # package everything is handled by the gradle `apiDumpJar` task (archives $OUT).
 # Write a small summary header for convenience.
 {
   echo "=== summary ==="
-  echo "classes requested: $(grep -vc '^\s*$\|^#' "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}" 2>/dev/null || echo '?')"
-  echo "missing from classpath: $(grep -c 'Error' "$OUT/missing.txt" 2>/dev/null || echo 0)"
-  echo "fabric modules: $(ls -1 "$API_MODULES_DIR" 2>/dev/null | wc -l)"
+  echo "classes requested: $(grep -c '[^#[:space:]]' "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}" 2>/dev/null || echo '?')"
+  echo "missing vanilla classes: $(grep -c 'Error' "$OUT/missing.txt" 2>/dev/null || echo 0)"
+  echo "missing fabric classes: $(grep -c 'Error' "$OUT/fabric-missing.txt" 2>/dev/null || echo 0)"
   echo
 } > "$OUT/SUMMARY.txt"
 echo "Introspection dump: $OUT/api-dump.txt ($(wc -l < "$OUT/api-dump.txt") lines)"
