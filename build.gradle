@@ -78,6 +78,8 @@ tasks.register("printClasspath", DefaultTask) {
 }
 // Packaging the dump as a jar so the repository's fixed CI upload pattern
 // (build/libs/*.jar) also carries it as an artifact.
+def projDir = project.projectDir
+def libsDirProp = layout.buildDirectory.dir("libs")
 tasks.register("apiDumpJar", Jar) {
 	dependsOn "printClasspath"
 	onlyIf { System.getenv("GITHUB_ACTIONS") != null }
@@ -100,5 +102,3 @@ tasks.register("apiDumpJar", Jar) {
 	}
 }
 tasks.named("jar") { finalizedBy "apiDumpJar" }
-def projDir = project.projectDir
-def libsDirProp = layout.buildDirectory.dir("libs")
