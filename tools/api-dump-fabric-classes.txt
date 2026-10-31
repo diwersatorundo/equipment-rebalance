@@ -15,7 +15,7 @@ net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
 net.fabricmc.fabric.api.loot.v3.LootTableEvents
 net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking$Context
-net.fabricmc.fabric.api.networking.v1.ClientPlayNetworking$Context
+net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking$Context
 net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 net.fabricmc.fabric.api.client.screen.v1.ScreenEvents$AfterInit
 net.fabricmc.fabric.api.client.screen.v1.ScreenEvents$BeforeInit
