@@ -71,6 +71,18 @@ public final class ERConfig {
 		return serverSnapshot;
 	}
 
+	/** Adopts an authoritative server snapshot built from raw trio (client side). */
+	public void adoptServerSnapshot(JsonObject settings, JsonObject profiles, JsonObject enchantments) {
+		if (settings == null || profiles == null || enchantments == null) return;
+		try {
+			ERConfigData rebuilt = Parser.merge(Defaults.build(), settings, profiles, enchantments);
+			this.data = rebuilt;
+			this.serverSnapshot = rebuilt;
+		} catch (Exception e) {
+			EquipmentRebalance.LOGGER.warn("Equipment Rebalance: failed to adopt server snapshot", e);
+		}
+	}
+
 	public void reload() {
 		Path dir = FabricLoader.getInstance().getConfigDir().resolve(ERConfigData.CONFIG_DIR);
 		try {
@@ -131,6 +143,17 @@ public final class ERConfig {
 		writePretty(o, sb, 0);
 		sb.append('\n');
 		return sb.toString();
+	}
+
+	/** Best-effort parse of a raw JSON string; null on garbage input. */
+	public static JsonObject tryParse(String json) {
+		if (json == null || json.isBlank()) return null;
+		try {
+			JsonElement el = JsonParser.parseString(json);
+			return el.isJsonObject() ? el.getAsJsonObject() : null;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	private static void writePretty(JsonElement el, StringBuilder sb, int depth) {

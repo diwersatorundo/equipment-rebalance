@@ -10,5 +10,6 @@ public class EquipmentRebalanceClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		LOGGER.info("Equipment Rebalance client init");
+		ClientSync.register();
 	}
 }

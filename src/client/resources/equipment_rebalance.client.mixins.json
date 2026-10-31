@@ -10,5 +10,7 @@
 	"mixins": [
 	],
 	"client": [
+		"EnchantmentScreenMixin",
+		"ScreenInvokerMixin"
 	]
 }

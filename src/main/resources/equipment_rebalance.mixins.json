@@ -11,7 +11,9 @@
 		"EnchantmentMixin",
 		"EnchantmentMenuMixin",
 		"AnvilMenuMixin",
-		"HolderReferenceMixin"
+		"HolderReferenceMixin",
+		"ItemStackTooltipMixin",
+		"EnchantmentHelperMixin"
 	],
 	"server": [
 	]
