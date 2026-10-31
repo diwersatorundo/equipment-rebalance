@@ -36,6 +36,9 @@ public final class ERConfig {
 
 	private volatile ERConfigData data = DEFAULTS;
 	private volatile ERConfigData serverSnapshot = DEFAULTS;
+	private volatile JsonObject rawSettings = Defaults.settings();
+	private volatile JsonObject rawProfiles = Defaults.profiles();
+	private volatile JsonObject rawEnchantments = Defaults.enchantments();
 	private static final ERConfig INSTANCE = new ERConfig();
 
 	public static ERConfig get() {
@@ -44,6 +47,19 @@ public final class ERConfig {
 
 	public ERConfigData current() {
 		return data;
+	}
+
+	/** Raw JSON objects loaded from disk (used for the client sync payload). */
+	public JsonObject rawSettings() {
+		return rawSettings;
+	}
+
+	public JsonObject rawProfiles() {
+		return rawProfiles;
+	}
+
+	public JsonObject rawEnchantments() {
+		return rawEnchantments;
 	}
 
 	/** Authoritative data for servers; mirrors the config on singleplayer. */
@@ -68,6 +84,9 @@ public final class ERConfig {
 			JsonObject settings = load(dir.resolve("settings.json"), Defaults::settings);
 			JsonObject profiles = load(dir.resolve("profiles.json"), Defaults::profiles);
 			JsonObject ench = load(dir.resolve("enchantments.json"), Defaults::enchantments);
+			this.rawSettings = settings;
+			this.rawProfiles = profiles;
+			this.rawEnchantments = ench;
 			rebuilt = Parser.merge(rebuilt, settings, profiles, ench);
 		} catch (Exception e) {
 			EquipmentRebalance.LOGGER.error("Equipment Rebalance: failed to read config — falling back to defaults", e);
@@ -107,7 +126,7 @@ public final class ERConfig {
 		}
 	}
 
-	private static String pretty(JsonObject o) {
+	public static String pretty(JsonObject o) {
 		var sb = new StringBuilder();
 		writePretty(o, sb, 0);
 		sb.append('\n');
@@ -150,9 +169,9 @@ public final class ERConfig {
 	}
 
 	/** Simple structural JSON merger/decoder for building a data snapshot. */
-	private static final class Parser {
+	public static final class Parser {
 		@SuppressWarnings("unchecked")
-		static ERConfigData merge(ERConfigData base, JsonObject settings, JsonObject profiles, JsonObject ench) {
+		public static ERConfigData merge(ERConfigData base, JsonObject settings, JsonObject profiles, JsonObject ench) {
 			boolean modEnabled = bx(settings, "enabled", base.modEnabled);
 			JsonObject tt = orNull(settings, "tooltip");
 			ERConfigData.TooltipSettings tooltip = mergeTooltip(base.tooltip, tt);

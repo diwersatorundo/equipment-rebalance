@@ -68,3 +68,5 @@ net.minecraft.util.Mth
 net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect
 net.minecraft.world.item.equipment.ArmorMaterial
 net.minecraft.world.item.equipment.ArmorType
+net.minecraft.client.gui.components.Button$Builder
+net.minecraft.world.item.ItemInstance
