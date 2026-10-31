@@ -1,5 +1,6 @@
 package dev.diwer.equipment_rebalance.mixin;
 
+import dev.diwer.equipment_rebalance.core.EquipmentNormalizerHook;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import org.spongepowered.asm.mixin.Mixin;

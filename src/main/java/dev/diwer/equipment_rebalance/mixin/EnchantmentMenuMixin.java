@@ -41,7 +41,9 @@ public abstract class EnchantmentMenuMixin {
 
 	@Shadow private Container enchantSlots;
 
-	@Shadow private List<EnchantmentInstance> getEnchantmentList(RegistryAccess access, ItemStack stack, int row, int weightedLevel);
+	@Shadow private List<EnchantmentInstance> getEnchantmentList(RegistryAccess access, ItemStack stack, int row, int weightedLevel) {
+		throw new IllegalStateException();
+	}
 
 	@Shadow public int[] costs;
 

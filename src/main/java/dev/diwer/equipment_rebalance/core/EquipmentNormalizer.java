@@ -53,7 +53,7 @@ public final class EquipmentNormalizer {
 		if (eid.slotKey() == null) return null; // armor/tools only
 		DataComponentMap cached = CACHE.get(item);
 		if (cached != null) return cached;
-		DataComponentMap built = build(cfg(), eid.slotKey(), original);
+		DataComponentMap built = build(ERConfig.get().current(), eid.slotKey(), original);
 		if (built == null) return null;
 		CACHE.put(item, built);
 		return built;

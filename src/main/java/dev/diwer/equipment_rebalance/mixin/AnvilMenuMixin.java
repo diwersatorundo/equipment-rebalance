@@ -3,7 +3,7 @@ package dev.diwer.equipment_rebalance.mixin;
 import dev.diwer.equipment_rebalance.config.ERConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.Redirect;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
 
