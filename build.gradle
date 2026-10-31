@@ -86,9 +86,12 @@ tasks.register("apiDumpJar", Jar) {
 	notCompatibleWithConfigurationCache("introspection dev tool")
 	group = "documentation"
 	description = "Packages API introspection dump into build/libs for CI artifact upload."
-	from(outDir) { include "*" }
+	from(outDir) {
+		include "**"
+		exclude "**/*.jar"
+	}
 	archiveFileName = "api-dump.jar"
-	doLast {
+	doFirst {
 		libsDirProp.get().asFile.mkdirs()
 		def proc = new ProcessBuilder(["bash", projDir.toString() + "/tools/api_dump.sh"])
 		proc.directory(projDir)

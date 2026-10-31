@@ -82,14 +82,13 @@ MODCP="$(echo "$MODCP" | sed 's/ /\\ /g')"
   ls -1 "$API_MODULES_DIR" 2>/dev/null
 } >> "$OUT/api-dump.txt"
 
-# package everything as a jar for the CI artifact upload pattern
-if [ ! -f "$LIBS_OUT" ]; then mkdir -p "$LIBS_OUT"; fi
-JAROUT="$LIBS_OUT/api-dump-contents.jar"
-rm -f "$JAROUT"
-(cd "$OUT" && find . -type f -print) | while read -r f; do :; done
-if command -v jar >/dev/null 2>&1; then
-  (cd "$OUT" && jar cf "$OLDPWD/$JAROUT" . >/dev/null 2>&1) || true
-else
-  (cd "$OUT" && zip -qr "$OLDPWD/${JAROUT}" .) || true
-fi
+# package everything is handled by the gradle `apiDumpJar` task (archives $OUT).
+# Write a small summary header for convenience.
+{
+  echo "=== summary ==="
+  echo "classes requested: $(grep -vc '^\s*$\|^#' "${CI_CLASSLIST:-$PWD/tools/api-dump-classes.txt}" 2>/dev/null || echo '?')"
+  echo "missing from classpath: $(grep -c 'Error' "$OUT/missing.txt" 2>/dev/null || echo 0)"
+  echo "fabric modules: $(ls -1 "$API_MODULES_DIR" 2>/dev/null | wc -l)"
+  echo
+} > "$OUT/SUMMARY.txt"
 echo "Introspection dump: $OUT/api-dump.txt ($(wc -l < "$OUT/api-dump.txt") lines)"
