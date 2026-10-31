@@ -8,6 +8,10 @@
 	},
 	"refmap": "equipment_rebalance.refmap.json",
 	"mixins": [
+		"EnchantmentMixin",
+		"EnchantmentMenuMixin",
+		"AnvilMenuMixin",
+		"HolderReferenceMixin"
 	],
 	"server": [
 	]
