@@ -13,7 +13,8 @@
 		"AnvilMenuMixin",
 		"HolderReferenceMixin",
 		"ItemStackTooltipMixin",
-		"EnchantmentHelperMixin"
+		"EnchantmentHelperMixin",
+		"EnchantingTableEntityMixin"
 	],
 	"server": [
 	]

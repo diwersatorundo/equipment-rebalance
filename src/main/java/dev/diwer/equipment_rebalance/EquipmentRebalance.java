@@ -3,6 +3,7 @@ package dev.diwer.equipment_rebalance;
 import dev.diwer.equipment_rebalance.config.ERConfig;
 import dev.diwer.equipment_rebalance.config.ERConfigData;
 import dev.diwer.equipment_rebalance.core.EquipmentNormalizer;
+import dev.diwer.equipment_rebalance.core.TableUsesTransfer;
 import dev.diwer.equipment_rebalance.sync.JoinSync;
 import dev.diwer.equipment_rebalance.sync.ServerSync;
 import net.fabricmc.api.ModInitializer;
@@ -20,6 +21,7 @@ public class EquipmentRebalance implements ModInitializer {
 		LOGGER.info("Equipment Rebalance v{} initializing (MC 26.3, loader 0.20.1)", CORE_VERSION);
 		ServerSync.register();
 		JoinSync.register();
+		TableUsesTransfer.register();
 		reloadConfig();
 	}
 
