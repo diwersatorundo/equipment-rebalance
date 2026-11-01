@@ -24,6 +24,9 @@ public final class ServerSync {
 		ServerPlayNetworking.registerGlobalReceiver(ERPayloads.REPAIR_TOGGLE, (payload, context) -> {
 			ServerPlayer player = context.player();
 			RepairState.setRepairMode(player.getUUID(), payload.repairMode());
+			if (ServerPlayNetworking.canSend(player, ERPayloads.REPAIR_TOGGLE)) {
+				ServerPlayNetworking.send(player, new ERPayloads.RepairTogglePayload(payload.repairMode()));
+			}
 		});
 	}
 

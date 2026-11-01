@@ -66,10 +66,16 @@ public final class EnchEconomy {
 		return ench.unwrapKey().map(k -> k.identifier().getPath().endsWith("_curse")).orElse(false);
 	}
 
+	public static boolean isVanishingCurse(Holder<Enchantment> ench) {
+		return ench.unwrapKey().map(k -> k.identifier().getPath().endsWith("vanishing_curse")).orElse(false);
+	}
+
 	/** Curses (per config) occupy neither slots nor capacity. */
 	public static boolean isFreeEnchantment(Holder<Enchantment> ench) {
 		ERConfigData cfg = cfg();
-		return cfg.cursesFree && isCurse(ench);
+		if (!cfg.cursesFree || !isCurse(ench)) return false;
+		if (cfg.vanishingCurseCounts && isVanishingCurse(ench)) return false;
+		return true;
 	}
 
 	// ------------------------------------------------------------------
