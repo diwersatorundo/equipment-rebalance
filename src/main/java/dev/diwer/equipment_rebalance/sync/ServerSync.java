@@ -20,6 +20,7 @@ public final class ServerSync {
 	public static void register() {
 		PayloadTypeRegistry.clientboundPlay().register(ERPayloads.PROFILES, ERPayloads.ProfilesPayload.STREAM_CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(ERPayloads.REPAIR_TOGGLE, ERPayloads.RepairTogglePayload.STREAM_CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(ERPayloads.REPAIR_TOGGLE, ERPayloads.RepairTogglePayload.STREAM_CODEC);
 
 		ServerPlayNetworking.registerGlobalReceiver(ERPayloads.REPAIR_TOGGLE, (payload, context) -> {
 			ServerPlayer player = context.player();
