@@ -19,3 +19,4 @@ net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking$Context
 net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 net.fabricmc.fabric.api.client.screen.v1.ScreenEvents$AfterInit
 net.fabricmc.fabric.api.client.screen.v1.ScreenEvents$BeforeInit
+net.fabricmc.fabric.api.loot.v3.LootTableEvents$ModifyDrops

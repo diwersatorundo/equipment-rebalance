@@ -10,3 +10,5 @@ net.minecraft.core.component.PatchedDataComponentMap
 net.minecraft.core.component.DataComponentMap$Builder
 net.minecraft.core.Holder
 net.minecraft.core.Holder$Reference
+net.minecraft.world.level.block.entity.BlockEntity
+net.minecraft.world.item.BlockItem
