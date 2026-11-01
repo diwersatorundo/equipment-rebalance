@@ -27,24 +27,28 @@ public final class TooltipBuilder {
 		out.add(Component.empty()); // spacer
 
 		int usedSlots = EnchEconomy.usedSlots(stack);
-		Component slotsLine = Component.empty()
-				.append(Component.literal("Slots ").withStyle(ChatFormatting.GRAY))
+		net.minecraft.network.chat.MutableComponent slotsLine = Component.empty()
+				.append(Component.translatable("equipment_rebalance.tooltip.slots").withStyle(ChatFormatting.GRAY))
+				.append(Component.literal(" "))
 				.append(bar(usedSlots, p.slots(), Math.max(1, tt.slotsBarLength()), fill, empty))
-				.append(Component.literal(" " + usedSlots + "/" + p.slots()).withStyle(ChatFormatting.GRAY));
+				.append(Component.translatable("equipment_rebalance.tooltip.value", usedSlots, p.slots())
+						.withStyle(ChatFormatting.GRAY));
 		if (tt.showMaxLevel()) {
-			((net.minecraft.network.chat.MutableComponent) slotsLine)
-					.append(Component.literal(" (max " + p.maxLevel() + ")").withStyle(ChatFormatting.DARK_GRAY));
+			slotsLine.append(Component.translatable("equipment_rebalance.tooltip.max_level", p.maxLevel())
+					.withStyle(ChatFormatting.DARK_GRAY));
 		}
 		out.add(slotsLine);
 
 		if (p.capacity() != Integer.MAX_VALUE) {
 			int usedCap = EnchEconomy.usedCapacity(stack);
 			out.add(Component.empty()
-					.append(Component.literal("Power ").withStyle(ChatFormatting.GRAY))
+					.append(Component.translatable("equipment_rebalance.tooltip.power").withStyle(ChatFormatting.GRAY))
+					.append(Component.literal(" "))
 					.append(bar(usedCap, p.capacity(), Math.max(1, tt.capacityBarLength()), fill, empty))
-					.append(Component.literal(" " + usedCap + "/" + p.capacity()).withStyle(ChatFormatting.GRAY)));
+					.append(Component.translatable("equipment_rebalance.tooltip.value", usedCap, p.capacity())
+							.withStyle(ChatFormatting.GRAY)));
 			if (tt.warnOverCapacity() && usedCap > p.capacity()) {
-				out.add(Component.literal("Over capacity!").withStyle(ChatFormatting.RED));
+				out.add(Component.translatable("equipment_rebalance.tooltip.over_capacity").withStyle(ChatFormatting.RED));
 			}
 		}
 		return out;

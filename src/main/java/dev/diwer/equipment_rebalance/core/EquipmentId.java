@@ -39,15 +39,22 @@ public final class EquipmentId {
 		if (path.equals("turtle_helmet")) return new EquipmentId(Family.SPECIAL, path, "turtle_helmet");
 		for (String suffix : ARMOR_SUFFIXES) {
 			if (path.endsWith(suffix)) {
-				return new EquipmentId(Family.ARMOR, path, normalizeMaterial(path.substring(0, path.length() - suffix.length())));
+				return new EquipmentId(Family.ARMOR, path, materialOf(path, suffix));
 			}
 		}
 		for (String suffix : TOOL_SUFFIXES) {
 			if (path.endsWith(suffix)) {
-				return new EquipmentId(Family.TOOL, path, normalizeMaterial(path.substring(0, path.length() - suffix.length())));
+				return new EquipmentId(Family.TOOL, path, materialOf(path, suffix));
 			}
 		}
 		return new EquipmentId(Family.OTHER, path, null);
+	}
+
+	/** "iron_helmet" + "helmet" -> "iron"; "golden_sword" + "sword" -> "gold". */
+	private static String materialOf(String path, String suffix) {
+		int end = path.length() - suffix.length();
+		if (end > 0 && path.charAt(end - 1) == '_') end--;
+		return normalizeMaterial(end > 0 ? path.substring(0, end) : "");
 	}
 
 	private static String normalizeMaterial(String raw) {

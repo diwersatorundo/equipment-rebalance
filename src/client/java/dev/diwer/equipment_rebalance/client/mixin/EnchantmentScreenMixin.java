@@ -31,18 +31,24 @@ public abstract class EnchantmentScreenMixin {
 		EnchantmentScreen self = (EnchantmentScreen) (Object) this;
 
 		Button built = ((ScreenInvokerMixin) (Object) this).callAddRenderableWidget(
-				Button.builder(Component.literal("Repair: " + (on ? "ON" : "OFF")), b -> {
+				Button.builder(equipment_rebalance$label(on), b -> {
 					Minecraft m = Minecraft.getInstance();
 					if (m.player == null) return;
 					boolean now = !RepairState.isRepairMode(m.player.getUUID());
 					RepairState.setRepairMode(m.player.getUUID(), now);
-					b.setMessage(Component.literal("Repair: " + (now ? "ON" : "OFF")));
+					b.setMessage(equipment_rebalance$label(now));
 					ClientPlayNetworking.send(new ERPayloads.RepairTogglePayload(now));
 				})
 						.bounds(((net.minecraft.client.gui.screens.Screen) (Object) self).width - 100, 6, 94, 18)
-						.tooltip(Tooltip.create(Component.literal("Repair mode: use the enchanting table as a repair service (XP cost, uses a table charge)")))
+						.tooltip(Tooltip.create(Component.translatable("equipment_rebalance.repair.tooltip")))
 						.build());
 		this.er$repairButton = built;
+	}
+
+	@Unique
+	private static Component equipment_rebalance$label(boolean on) {
+		return Component.translatable("equipment_rebalance.repair.button",
+				Component.translatable(on ? "equipment_rebalance.repair.on" : "equipment_rebalance.repair.off"));
 	}
 
 	@Unique

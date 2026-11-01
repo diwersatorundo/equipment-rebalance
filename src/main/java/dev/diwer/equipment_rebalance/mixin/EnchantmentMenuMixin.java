@@ -119,9 +119,10 @@ public abstract class EnchantmentMenuMixin {
 		int max = stack.getMaxDamage();
 		int dmg = stack.getDamageValue();
 		if (max <= 0 || dmg <= 0) return false;
-		if (player.totalExperience < cost) return false;
+		boolean creative = player.isCreative();
+		if (!creative && player.totalExperience < cost) return false;
 		stack.setDamageValue(0);
-		player.giveExperiencePoints(-cost);
+		if (!creative) player.giveExperiencePoints(-cost);
 		return true;
 	}
 }

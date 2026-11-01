@@ -52,7 +52,8 @@ public final class LegacyItems {
 		return changed;
 	}
 
-	private static boolean clamp(ItemStack stack, ERConfigData.MaterialProfile p) {
+	/** Enforces slots / max level / capacity on a stack. @return true when modified. */
+	public static boolean clamp(ItemStack stack, ERConfigData.MaterialProfile p) {
 		boolean changed = false;
 
 		// 1. per-enchantment level cap

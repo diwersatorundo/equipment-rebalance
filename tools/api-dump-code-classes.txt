@@ -12,3 +12,8 @@ net.minecraft.core.Holder
 net.minecraft.core.Holder$Reference
 net.minecraft.world.level.block.entity.BlockEntity
 net.minecraft.world.item.BlockItem
+net.minecraft.client.gui.screens.inventory.EnchantmentScreen
+net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+net.minecraft.world.inventory.ItemCombinerMenu
+net.minecraft.world.inventory.ResultContainer
+net.minecraft.client.gui.screens.inventory.EnchantmentNames
