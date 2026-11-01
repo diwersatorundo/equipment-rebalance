@@ -76,12 +76,14 @@ public abstract class EnchantmentMenuMixin {
 		if (TableUses.remaining(be, cfg) <= 0) return;
 
 		if (RepairState.isRepairMode(player.getUUID())) {
-			this.equipment_rebalance$repair(player, stack);
-			TableUses.consume(be, cfg);
-			this.enchantSlots.setChanged();
+			if (this.equipment_rebalance$repair(player, stack)) {
+				TableUses.consume(be, cfg);
+				this.enchantSlots.setChanged();
+			}
 			return;
 		}
 
+		if (this.costs[row] <= 0) return;
 		ERConfigData.MaterialProfile profile = EnchEconomy.profileFor(stack);
 		if (profile == null) return;
 		List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), stack, row, this.costs[row]);
@@ -107,15 +109,17 @@ public abstract class EnchantmentMenuMixin {
 		TableUses.consume(be, cfg);
 	}
 
-	private void equipment_rebalance$repair(ServerPlayer player, ItemStack stack) {
+	/** @return true when durability was actually restored (and XP charged). */
+	private boolean equipment_rebalance$repair(ServerPlayer player, ItemStack stack) {
 		ERConfigData cfg = ERConfig.get().current();
 		int cost = RepairState.xpCost(stack, cfg);
-		if (cost <= 0) return;
+		if (cost <= 0) return false;
 		int max = stack.getMaxDamage();
 		int dmg = stack.getDamageValue();
-		if (max <= 0 || dmg <= 0) return;
-		if (player.totalExperience < cost) return;
+		if (max <= 0 || dmg <= 0) return false;
+		if (player.totalExperience < cost) return false;
 		stack.setDamageValue(0);
 		player.giveExperiencePoints(-cost);
+		return true;
 	}
 }

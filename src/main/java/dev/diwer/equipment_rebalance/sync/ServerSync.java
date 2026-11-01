@@ -29,6 +29,7 @@ public final class ServerSync {
 
 	/** Pushes the current (authoritative) snapshot to one player. */
 	public static void sendProfiles(ServerPlayer player) {
+		if (!ServerPlayNetworking.canSend(player, ERPayloads.PROFILES)) return;
 		ERConfig cfg = ERConfig.get();
 		ServerPlayNetworking.send(player, new ERPayloads.ProfilesPayload(
 				ERConfig.pretty(cfg.rawSettings()),
