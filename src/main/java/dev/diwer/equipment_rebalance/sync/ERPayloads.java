@@ -3,6 +3,7 @@ package dev.diwer.equipment_rebalance.sync;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
 /**
  * Custom packet payloads used by Equipment Rebalance.
@@ -14,10 +15,10 @@ public final class ERPayloads {
 	private ERPayloads() {}
 
 	public static final CustomPacketPayload.Type<ProfilesPayload> PROFILES =
-			CustomPacketPayload.createType("equipment_rebalance:profiles_v1");
+			new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("equipment_rebalance", "profiles_v1"));
 
 	public static final CustomPacketPayload.Type<RepairTogglePayload> REPAIR_TOGGLE =
-			CustomPacketPayload.createType("equipment_rebalance:repair_toggle_v1");
+			new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("equipment_rebalance", "repair_toggle_v1"));
 
 	public record ProfilesPayload(String settings, String profiles, String enchantments) implements CustomPacketPayload {
 		public static final StreamCodec<FriendlyByteBuf, ProfilesPayload> STREAM_CODEC = CustomPacketPayload.codec(

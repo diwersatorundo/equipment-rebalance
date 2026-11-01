@@ -75,3 +75,4 @@ net.minecraft.nbt.CompoundTag
 net.minecraft.world.level.storage.loot.LootContext
 net.minecraft.world.item.Items
 net.minecraft.core.component.DataComponentGetter
+net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type
