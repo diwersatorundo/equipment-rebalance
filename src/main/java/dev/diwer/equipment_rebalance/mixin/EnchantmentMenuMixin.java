@@ -57,10 +57,15 @@ public abstract class EnchantmentMenuMixin {
 		ERConfigData cfg = ERConfig.get().current();
 		if (!cfg.modEnabled) return;
 		if (row < 0 || row >= this.costs.length) return;
-		if (!(player instanceof ServerPlayer serverPlayer)) return;
 		ItemStack probe = this.enchantSlots.getItem(0);
 		if (probe.isEmpty()) return;
 		if (EnchEconomy.profileFor(probe) == null) return;
+		if (!(player instanceof ServerPlayer serverPlayer)) {
+			// Client mirror of the menu: vanilla refuses to send the click packet when the
+			// player lacks levels/lapis. In repair mode any of the three offers must work.
+			if (RepairState.isRepairMode(player.getUUID())) cir.setReturnValue(true);
+			return;
+		}
 		this.access.execute((Level level, BlockPos pos) -> this.equipment_rebalance$operate(level, pos, serverPlayer, row));
 		cir.setReturnValue(true);
 	}
