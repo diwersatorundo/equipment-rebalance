@@ -3,6 +3,7 @@ package dev.diwer.equipment_rebalance.mixin;
 import dev.diwer.equipment_rebalance.config.ERConfig;
 import dev.diwer.equipment_rebalance.config.ERConfigData;
 import dev.diwer.equipment_rebalance.core.EnchEconomy;
+import dev.diwer.equipment_rebalance.core.LegacyItems;
 import dev.diwer.equipment_rebalance.core.TableUses;
 import dev.diwer.equipment_rebalance.repair.RepairState;
 import net.minecraft.core.BlockPos;
@@ -73,6 +74,7 @@ public abstract class EnchantmentMenuMixin {
 		if (!(level.getBlockEntity(pos) instanceof EnchantingTableBlockEntity be)) return;
 		ItemStack stack = this.enchantSlots.getItem(0);
 		if (stack.isEmpty()) return;
+		if (LegacyItems.validate(stack, cfg)) this.enchantSlots.setChanged();
 		if (TableUses.remaining(be, cfg) <= 0) return;
 
 		if (RepairState.isRepairMode(player.getUUID())) {

@@ -36,4 +36,14 @@ public abstract class EnchantmentHelperMixin {
 		}
 		cir.setReturnValue(filtered);
 	}
+
+	/** DISABLE_EFFECT: existing Mending enchantments stop repairing from XP. */
+	@Inject(method = "modifyDurabilityToRepairFromXp", at = @At("RETURN"), cancellable = true)
+	private static void equipment_rebalance$disableMendingEffect(net.minecraft.server.level.ServerLevel level,
+			net.minecraft.world.item.ItemStack stack, int xp,
+			CallbackInfoReturnable<Integer> cir) {
+		if (ERConfig.get().current().mendingLegacyBehavior == ERConfigData.MendingBehavior.DISABLE_EFFECT) {
+			cir.setReturnValue(0);
+		}
+	}
 }
