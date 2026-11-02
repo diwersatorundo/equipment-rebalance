@@ -13,7 +13,7 @@ import com.google.gson.JsonPrimitive;
  */
 public final class ERConfigData {
 
-	public static final int SCHEMA_VERSION = 1;
+	public static final int SCHEMA_VERSION = 2;
 	public static final String CONFIG_DIR = "equipment_rebalance";
 
 	// --------------------------------------------------------------------

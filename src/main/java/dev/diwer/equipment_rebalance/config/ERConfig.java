@@ -124,6 +124,13 @@ public final class ERConfig {
 				write(p, parsed);
 				return parsed;
 			}
+			int version = parsed.has("schema_version") ? parsed.get("schema_version").getAsInt() : 0;
+			if (version < ERConfigData.SCHEMA_VERSION) {
+				EquipmentRebalance.LOGGER.info("{} uses config schema {} (< {}); regenerating with new defaults",
+						p.getFileName(), version, ERConfigData.SCHEMA_VERSION);
+				parsed = defaults.get();
+				write(p, parsed);
+			}
 			return parsed;
 		}
 		parsed = defaults.get();
@@ -387,7 +394,7 @@ public final class ERConfig {
 
 	/** All file-rendering & default value definitions live here. */
 	public static final class Defaults {
-		public static final int[] LEVEL_BASE_COST = {0, 1, 2, 3, 5, 7, 9, 12, 15, 18, 22};
+		public static final int[] LEVEL_BASE_COST = {0, 1, 1, 2, 2, 3, 5, 7, 10, 13, 17};
 
 		/** The default configuration snapshot. */
 		static ERConfigData build() {
@@ -411,15 +418,15 @@ public final class ERConfig {
 					"minecraft:mending", "minecraft:thorns")) {
 				mult.put(id, ONE);
 			}
-			mult.put("minecraft:thorns", 1.5);
-			mult.put("minecraft:fire_aspect", 1.5);
-			mult.put("minecraft:knockback", 1.5);
-			mult.put("minecraft:soul_speed", 1.5);
-			mult.put("minecraft:depth_strider", 1.5);
-			mult.put("minecraft:fortune", 2.0);
-			mult.put("minecraft:looting", 2.0);
-			mult.put("minecraft:silk_touch", 2.0);
-			mult.put("minecraft:unbreaking", 2.0);
+			mult.put("minecraft:thorns", 1.25);
+			mult.put("minecraft:fire_aspect", 1.25);
+			mult.put("minecraft:knockback", 1.25);
+			mult.put("minecraft:soul_speed", 1.25);
+			mult.put("minecraft:depth_strider", 1.25);
+			mult.put("minecraft:fortune", 1.5);
+			mult.put("minecraft:looting", 1.5);
+			mult.put("minecraft:silk_touch", 1.5);
+			mult.put("minecraft:unbreaking", 1.5);
 
 			Map<String, ERConfigData.NormalizedArmorStats> nArmor = new HashMap<>();
 			nArmor.put("helmet", new ERConfigData.NormalizedArmorStats(55, 1.0f, 0.0f));
@@ -445,44 +452,44 @@ public final class ERConfig {
 
 		private static java.util.Map<String, ERConfigData.MaterialProfile> armorProfiles() {
 			Map<String, ERConfigData.MaterialProfile> m = new HashMap<>();
-			m.put("leather", new ERConfigData.MaterialProfile(2, 3, 6));
-			m.put("gold", new ERConfigData.MaterialProfile(3, 4, 10));
-			m.put("chainmail", new ERConfigData.MaterialProfile(3, 4, 11));
-			m.put("copper", new ERConfigData.MaterialProfile(3, 4, 12));
-			m.put("iron", new ERConfigData.MaterialProfile(3, 5, 14));
-			m.put("diamond", new ERConfigData.MaterialProfile(4, 6, 20));
-			m.put("netherite", new ERConfigData.MaterialProfile(6, 7, 26));
+			m.put("leather", new ERConfigData.MaterialProfile(2, 3, 8));
+			m.put("gold", new ERConfigData.MaterialProfile(3, 4, 12));
+			m.put("chainmail", new ERConfigData.MaterialProfile(3, 4, 13));
+			m.put("copper", new ERConfigData.MaterialProfile(3, 5, 15));
+			m.put("iron", new ERConfigData.MaterialProfile(4, 6, 20));
+			m.put("diamond", new ERConfigData.MaterialProfile(5, 7, 28));
+			m.put("netherite", new ERConfigData.MaterialProfile(6, 8, 38));
 			return m;
 		}
 
 		private static java.util.Map<String, ERConfigData.MaterialProfile> toolProfiles() {
 			Map<String, ERConfigData.MaterialProfile> m = new HashMap<>();
-			m.put("wood", new ERConfigData.MaterialProfile(2, 3, 6));
-			m.put("stone", new ERConfigData.MaterialProfile(2, 4, 8));
-			m.put("copper", new ERConfigData.MaterialProfile(3, 4, 11));
-			m.put("gold", new ERConfigData.MaterialProfile(3, 4, 12));
-			m.put("iron", new ERConfigData.MaterialProfile(3, 5, 14));
-			m.put("diamond", new ERConfigData.MaterialProfile(4, 6, 20));
-			m.put("netherite", new ERConfigData.MaterialProfile(6, 7, 26));
+			m.put("wood", new ERConfigData.MaterialProfile(2, 3, 8));
+			m.put("stone", new ERConfigData.MaterialProfile(2, 4, 11));
+			m.put("copper", new ERConfigData.MaterialProfile(3, 5, 15));
+			m.put("gold", new ERConfigData.MaterialProfile(3, 5, 17));
+			m.put("iron", new ERConfigData.MaterialProfile(4, 6, 22));
+			m.put("diamond", new ERConfigData.MaterialProfile(5, 7, 28));
+			m.put("netherite", new ERConfigData.MaterialProfile(6, 8, 40));
 			return m;
 		}
 
 		private static java.util.Map<String, ERConfigData.MaterialProfile> specialProfiles() {
 			Map<String, ERConfigData.MaterialProfile> m = new HashMap<>();
-			m.put("elytra", new ERConfigData.MaterialProfile(3, 4, 12));
-			m.put("shield", new ERConfigData.MaterialProfile(2, 4, 8));
-			m.put("bow", new ERConfigData.MaterialProfile(3, 5, 14));
-			m.put("crossbow", new ERConfigData.MaterialProfile(3, 5, 14));
-			m.put("trident", new ERConfigData.MaterialProfile(3, 6, 16));
-			m.put("mace", new ERConfigData.MaterialProfile(3, 5, 14));
-			m.put("spear", new ERConfigData.MaterialProfile(3, 5, 14));
-			m.put("fishing_rod", new ERConfigData.MaterialProfile(2, 4, 8));
-			m.put("shears", new ERConfigData.MaterialProfile(2, 4, 8));
+			m.put("elytra", new ERConfigData.MaterialProfile(4, 5, 18));
+			m.put("shield", new ERConfigData.MaterialProfile(2, 5, 10));
+			m.put("bow", new ERConfigData.MaterialProfile(4, 6, 20));
+			m.put("crossbow", new ERConfigData.MaterialProfile(4, 6, 20));
+			m.put("trident", new ERConfigData.MaterialProfile(4, 7, 24));
+			m.put("mace", new ERConfigData.MaterialProfile(4, 7, 24));
+			m.put("spear", new ERConfigData.MaterialProfile(4, 7, 24));
+			m.put("fishing_rod", new ERConfigData.MaterialProfile(3, 5, 12));
+			m.put("shears", new ERConfigData.MaterialProfile(2, 5, 8));
 			m.put("brush", new ERConfigData.MaterialProfile(2, 4, 8));
 			m.put("carrot_on_a_stick", new ERConfigData.MaterialProfile(1, 1, 1));
 			m.put("warped_fungus_on_a_stick", new ERConfigData.MaterialProfile(1, 1, 1));
-			m.put("turtle_helmet", new ERConfigData.MaterialProfile(3, 4, 11));
-			m.put("other", new ERConfigData.MaterialProfile(2, 3, 6));
+			m.put("turtle_helmet", new ERConfigData.MaterialProfile(3, 6, 16));
+			m.put("other", new ERConfigData.MaterialProfile(2, 3, 8));
 			return m;
 		}
 
@@ -640,15 +647,15 @@ public final class ERConfig {
 					"fire_aspect", "knockback", "soul_speed", "sweeping_edge", "swift_sneak", "wind_burst", "quick_charge", "channeling",
 					"riptide", "lure", "luck_of_the_sea", "infinity", "silk_touch", "binding_curse", "vanishing_curse", "unbreaking",
 					"fortune", "looting", "mending", "thorns");
-			mult.addProperty("minecraft:thorns", 1.5);
-			mult.addProperty("minecraft:fire_aspect", 1.5);
-			mult.addProperty("minecraft:knockback", 1.5);
-			mult.addProperty("minecraft:soul_speed", 1.5);
-			mult.addProperty("minecraft:depth_strider", 1.5);
-			mult.addProperty("minecraft:fortune", 2.0);
-			mult.addProperty("minecraft:looting", 2.0);
-			mult.addProperty("minecraft:silk_touch", 2.0);
-			mult.addProperty("minecraft:unbreaking", 2.0);
+			mult.addProperty("minecraft:thorns", 1.25);
+			mult.addProperty("minecraft:fire_aspect", 1.25);
+			mult.addProperty("minecraft:knockback", 1.25);
+			mult.addProperty("minecraft:soul_speed", 1.25);
+			mult.addProperty("minecraft:depth_strider", 1.25);
+			mult.addProperty("minecraft:fortune", 1.5);
+			mult.addProperty("minecraft:looting", 1.5);
+			mult.addProperty("minecraft:silk_touch", 1.5);
+			mult.addProperty("minecraft:unbreaking", 1.5);
 			o.add("enchantment_multipliers", mult);
 			return o;
 		}
