@@ -29,19 +29,19 @@ public class ERConfigScreen extends Screen {
 
 		this.addRenderableWidget(Button.builder(
 				Component.translatable("equipment_rebalance.config.group.tools"),
-				b -> Minecraft.getInstance().setScreen(new ProfileScreen(this, "tool_materials",
+				b -> Minecraft.getInstance().gui.setScreen(new ProfileScreen(this, "tool_materials",
 						Component.translatable("equipment_rebalance.config.group.tools"))))
 				.bounds(cx - w / 2, y, w, h).build());
 		y += 24;
 		this.addRenderableWidget(Button.builder(
 				Component.translatable("equipment_rebalance.config.group.armor"),
-				b -> Minecraft.getInstance().setScreen(new ProfileScreen(this, "armor_materials",
+				b -> Minecraft.getInstance().gui.setScreen(new ProfileScreen(this, "armor_materials",
 						Component.translatable("equipment_rebalance.config.group.armor"))))
 				.bounds(cx - w / 2, y, w, h).build());
 		y += 24;
 		this.addRenderableWidget(Button.builder(
 				Component.translatable("equipment_rebalance.config.group.special"),
-				b -> Minecraft.getInstance().setScreen(new ProfileScreen(this, "special_items",
+				b -> Minecraft.getInstance().gui.setScreen(new ProfileScreen(this, "special_items",
 						Component.translatable("equipment_rebalance.config.group.special"))))
 				.bounds(cx - w / 2, y, w, h).build());
 		y += 30;
@@ -59,6 +59,6 @@ public class ERConfigScreen extends Screen {
 
 	@Override
 	public void onClose() {
-		Minecraft.getInstance().setScreen(this.parent);
+		Minecraft.getInstance().gui.setScreen(this.parent);
 	}
 }
