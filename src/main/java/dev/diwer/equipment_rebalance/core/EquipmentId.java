@@ -11,9 +11,9 @@ public final class EquipmentId {
 	public enum Family { ARMOR, TOOL, SPECIAL, OTHER }
 
 	public static final List<String> ARMOR_SUFFIXES = List.of("helmet", "chestplate", "leggings", "boots");
-	public static final List<String> TOOL_SUFFIXES = List.of("sword", "pickaxe", "axe", "shovel", "hoe");
+	public static final List<String> TOOL_SUFFIXES = List.of("sword", "pickaxe", "axe", "shovel", "hoe", "spear");
 	public static final List<String> SPECIAL_PATHS = List.of("elytra", "shield", "bow", "crossbow", "trident",
-			"mace", "fishing_rod", "shears", "brush", "carrot_on_a_stick", "warped_fungus_on_a_stick");
+			"mace", "spear", "fishing_rod", "shears", "brush", "carrot_on_a_stick", "warped_fungus_on_a_stick");
 
 	public final Family family;
 	public final String path;

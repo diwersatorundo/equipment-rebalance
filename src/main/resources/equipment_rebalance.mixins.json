@@ -12,6 +12,7 @@
 		"EnchantmentMenuMixin",
 		"AnvilMenuMixin",
 		"ItemCombinerMenuAccessor",
+		"AnvilMenuAccessor",
 		"HolderReferenceMixin",
 		"ItemStackTooltipMixin",
 		"EnchantmentHelperMixin",

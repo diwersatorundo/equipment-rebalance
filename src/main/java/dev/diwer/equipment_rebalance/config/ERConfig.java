@@ -475,6 +475,7 @@ public final class ERConfig {
 			m.put("crossbow", new ERConfigData.MaterialProfile(3, 5, 14));
 			m.put("trident", new ERConfigData.MaterialProfile(3, 6, 16));
 			m.put("mace", new ERConfigData.MaterialProfile(3, 5, 14));
+			m.put("spear", new ERConfigData.MaterialProfile(3, 5, 14));
 			m.put("fishing_rod", new ERConfigData.MaterialProfile(2, 4, 8));
 			m.put("shears", new ERConfigData.MaterialProfile(2, 4, 8));
 			m.put("brush", new ERConfigData.MaterialProfile(2, 4, 8));

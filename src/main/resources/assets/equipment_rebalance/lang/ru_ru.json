@@ -9,5 +9,6 @@
 	"equipment_rebalance.repair.off": "ВЫКЛ",
 	"equipment_rebalance.repair.tooltip": "Режим ремонта: положите повреждённый предмет и нажмите на любой из трёх светящихся вариантов, чтобы починить его за опыт (тратит один заряд стола).",
 	"equipment_rebalance.repair.cost": "Стоимость ремонта: %s опыта",
-	"equipment_rebalance.repair.not_damaged": "Этот предмет не повреждён."
+	"equipment_rebalance.repair.not_damaged": "Этот предмет не повреждён.",
+	"equipment_rebalance.tooltip.book_cost": "%s ёмкости"
 }

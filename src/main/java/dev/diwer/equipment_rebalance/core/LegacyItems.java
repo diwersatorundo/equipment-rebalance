@@ -52,6 +52,31 @@ public final class LegacyItems {
 		return changed;
 	}
 
+	/**
+	 * Anvil combination check. Caps each enchantment at the profile max level, but never
+	 * lowers existing levels. A combination that would exceed slots or capacity is rejected
+	 * outright (returns false) so the player has to manage the budget themselves.
+	 */
+	public static boolean fitAnvilResult(ItemStack stack, ERConfigData.MaterialProfile p) {
+		ItemEnchantments cur = stack.get(DataComponents.ENCHANTMENTS);
+		if (cur == null || cur.isEmpty()) return true;
+		ItemEnchantments.Mutable mut = new ItemEnchantments.Mutable(cur);
+		boolean changed = false;
+		for (Holder<Enchantment> h : cur.keySet()) {
+			int lvl = cur.getLevel(h);
+			if (lvl > p.maxLevel()) {
+				mut.set(h, p.maxLevel());
+				changed = true;
+			}
+		}
+		ItemEnchantments capped = changed ? mut.toImmutable() : cur;
+		if (EnchEconomy.usedSlots(capped) > p.slots() || EnchEconomy.usedCapacity(capped) > p.capacity()) {
+			return false;
+		}
+		if (changed) stack.set(DataComponents.ENCHANTMENTS, capped);
+		return true;
+	}
+
 	/** Enforces slots / max level / capacity on a stack. @return true when modified. */
 	public static boolean clamp(ItemStack stack, ERConfigData.MaterialProfile p) {
 		boolean changed = false;

@@ -9,5 +9,6 @@
 	"equipment_rebalance.repair.off": "OFF",
 	"equipment_rebalance.repair.tooltip": "Repair mode: place a damaged item and click any of the three glowing options to repair it for XP (uses one table charge).",
 	"equipment_rebalance.repair.cost": "Repair cost: %s XP",
-	"equipment_rebalance.repair.not_damaged": "This item is not damaged."
+	"equipment_rebalance.repair.not_damaged": "This item is not damaged.",
+	"equipment_rebalance.tooltip.book_cost": "%s power"
 }

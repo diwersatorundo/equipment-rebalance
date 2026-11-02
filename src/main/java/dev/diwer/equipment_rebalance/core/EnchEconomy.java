@@ -33,10 +33,16 @@ public final class EnchEconomy {
 		ERConfigData cfg = cfg();
 		return switch (eid.family) {
 			case SPECIAL -> eid.material == null ? null : cfg.specialProfiles.get(eid.material);
-			case ARMOR -> eid.material == null ? null : cfg.armorProfiles.get(eid.material);
-			case TOOL -> eid.material == null ? null : cfg.toolProfiles.get(eid.material);
+			case ARMOR -> eid.material == null ? null : cfg.armorProfiles.getOrDefault(eid.material, other(cfg));
+			case TOOL -> eid.material == null ? null : cfg.toolProfiles.getOrDefault(eid.material, other(cfg));
 			case OTHER -> null;
 		};
+	}
+
+	/** Fallback profile for equipment whose material has no explicit entry. */
+	private static ERConfigData.MaterialProfile other(ERConfigData cfg) {
+		ERConfigData.MaterialProfile o = cfg.specialProfiles.get("other");
+		return o != null ? o : new ERConfigData.MaterialProfile(2, 3, 6);
 	}
 
 	// ------------------------------------------------------------------
@@ -83,7 +89,10 @@ public final class EnchEconomy {
 	// ------------------------------------------------------------------
 
 	public static int usedSlots(ItemStack stack) {
-		ItemEnchantments in = stack.get(DataComponents.ENCHANTMENTS);
+		return usedSlots(stack.get(DataComponents.ENCHANTMENTS));
+	}
+
+	public static int usedSlots(ItemEnchantments in) {
 		if (in == null) return 0;
 		int n = 0;
 		for (Holder<Enchantment> h : in.keySet()) {
@@ -95,7 +104,10 @@ public final class EnchEconomy {
 
 	/** Total capacity currently used (sum of per-level costs over levels 1..cur). */
 	public static int usedCapacity(ItemStack stack) {
-		ItemEnchantments in = stack.get(DataComponents.ENCHANTMENTS);
+		return usedCapacity(stack.get(DataComponents.ENCHANTMENTS));
+	}
+
+	public static int usedCapacity(ItemEnchantments in) {
 		if (in == null) return 0;
 		int total = 0;
 		for (var entry : in.entrySet()) {
