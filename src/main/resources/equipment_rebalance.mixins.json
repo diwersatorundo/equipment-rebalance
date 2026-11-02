@@ -8,6 +8,15 @@
 	},
 	"refmap": "equipment_rebalance.refmap.json",
 	"mixins": [
+		"EnchantmentMixin",
+		"EnchantmentMenuMixin",
+		"AnvilMenuMixin",
+		"ItemCombinerMenuAccessor",
+		"AnvilMenuAccessor",
+		"HolderReferenceMixin",
+		"ItemStackTooltipMixin",
+		"EnchantmentHelperMixin",
+		"EnchantingTableEntityMixin"
 	],
 	"server": [
 	]

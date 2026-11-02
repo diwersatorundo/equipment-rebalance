@@ -4,6 +4,7 @@ plugins {
 
 repositories {
 	// Loom adds essential maven repositories automatically.
+	maven { url = "https://maven.terraformersmc.com/releases/" }
 }
 
 loom {
@@ -21,6 +22,9 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Compile-time only: Mod Menu is optional at runtime.
+	compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {
@@ -42,28 +46,25 @@ java {
 }
 
 jar {
-	inputs.property "projectName", project.name
-
-	from("LICENSE") {
-		rename { "${it}_${project.name}" }
-	}
 }
 
 // ---------------------------------------------------------------------------
 // API introspection task (development tool, part of CI dump; safe to ignore).
 // Writes the resolved compile classpath of both source sets and the current
-// build info into build/api-classpath.txt so that CI can then run javap on
-// the Mojang-mapped vanilla + remapped Fabric API jars to validate mixin
-// targets against Minecraft 26.3.
+// build info into build/api-dump/api-classpath.txt so that CI can then run
+// javap on the Mojang-mapped vanilla + remapped Fabric API jars to validate
+// mixin targets against Minecraft 26.3.
 // ---------------------------------------------------------------------------
 def outDir = layout.buildDirectory.dir("api-dump").get()
 
 tasks.register("printClasspath", DefaultTask) {
+	notCompatibleWithConfigurationCache("introspection dev tool")
 	group = "documentation"
 	description = "Dumps resolved compile classpath for CI javap dumps."
 	doLast {
-		def p = outDir.file("api-classpath.txt").getAsFile().get()
-		outDir.getAsFile().get().mkdirs()
+		def dirFile = outDir.asFile
+		dirFile.mkdirs()
+		def p = outDir.file("api-classpath.txt").asFile
 		def sb = new StringBuilder()
 		["compileClasspath", "clientCompileClasspath"].each { name ->
 			def c = project.configurations.getAsMap().get(name)
@@ -79,3 +80,32 @@ tasks.register("printClasspath", DefaultTask) {
 		println "Classpath dumped to ${p}"
 	}
 }
+// Packaging the dump as a jar so the repository's fixed CI upload pattern
+// (build/libs/*.jar) also carries it as an artifact.
+def projDir = project.projectDir
+def libsDirProp = layout.buildDirectory.dir("libs")
+tasks.register("apiDumpJar", Jar) {
+	dependsOn "printClasspath"
+	onlyIf { System.getenv("GITHUB_ACTIONS") != null }
+	notCompatibleWithConfigurationCache("introspection dev tool")
+	group = "documentation"
+	description = "Packages API introspection dump into build/libs for CI artifact upload."
+	from(outDir) {
+		include "**"
+		exclude "**/*.jar"
+	}
+	archiveFileName = "api-dump.jar"
+	doFirst {
+		libsDirProp.get().asFile.mkdirs()
+		def proc = new ProcessBuilder(["bash", projDir.toString() + "/tools/api_dump.sh"])
+		proc.directory(projDir)
+		proc.environment().put("CI_WORKSPACE", libsDirProp.get().asFile.parent)
+		proc.environment().put("CI_CLASSLIST", projDir.toString() + "/tools/api-dump-classes.txt")
+		proc.redirectErrorStream(true)
+		def pr = proc.start()
+		pr.inputStream.readLines().each { println it }
+		def code = pr.waitFor()
+		if (code != 0) println "api_dump.sh exited with $code (non-fatal, introspection only)"
+	}
+}
+tasks.named("jar") { finalizedBy "apiDumpJar" }

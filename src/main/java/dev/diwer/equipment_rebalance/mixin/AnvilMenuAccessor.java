@@ -1,0 +1,12 @@
+package dev.diwer.equipment_rebalance.mixin;
+
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.inventory.DataSlot;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
+@Mixin(AnvilMenu.class)
+public interface AnvilMenuAccessor {
+	@Accessor("cost")
+	DataSlot equipment_rebalance$cost();
+}
