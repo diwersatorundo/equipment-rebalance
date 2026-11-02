@@ -108,6 +108,20 @@ public final class ERConfig {
 		serverSnapshot = rebuilt;
 	}
 
+	/** Replaces profiles.json (used by the in-game config screen) and reloads. */
+	public void saveProfiles(JsonObject profiles) {
+		if (profiles == null) return;
+		Path dir = FabricLoader.getInstance().getConfigDir().resolve(ERConfigData.CONFIG_DIR);
+		try {
+			Files.createDirectories(dir);
+			write(dir.resolve("profiles.json"), profiles);
+		} catch (IOException e) {
+			EquipmentRebalance.LOGGER.error("Cannot save profiles config", e);
+			return;
+		}
+		reload();
+	}
+
 	/**
 	 * Reads a config file; if it is missing, a defaults template is created on
 	 * disk and returned in-memory. Unreadable content is replaced by defaults.

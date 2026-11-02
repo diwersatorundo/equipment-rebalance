@@ -10,5 +10,20 @@
 	"equipment_rebalance.repair.tooltip": "Repair mode: place a damaged item and click any of the three glowing options to repair it for XP (uses one table charge).",
 	"equipment_rebalance.repair.cost": "Repair cost: %s XP",
 	"equipment_rebalance.repair.not_damaged": "This item is not damaged.",
-	"equipment_rebalance.tooltip.book_cost": "%s power"
+	"equipment_rebalance.tooltip.book_cost": "%s power",
+	"equipment_rebalance.config.title": "Equipment Rebalance",
+	"equipment_rebalance.config.group.tools": "Tools",
+	"equipment_rebalance.config.group.armor": "Armor",
+	"equipment_rebalance.config.group.special": "Special items",
+	"equipment_rebalance.config.material": "Material: %s",
+	"equipment_rebalance.config.slots": "Slots: %s",
+	"equipment_rebalance.config.max_level": "Max level: %s",
+	"equipment_rebalance.config.capacity": "Power: %s",
+	"equipment_rebalance.config.apply_all": "Apply to all materials",
+	"equipment_rebalance.config.applied": "Applied to all",
+	"equipment_rebalance.config.save": "Save",
+	"equipment_rebalance.config.saved": "Saved!",
+	"equipment_rebalance.config.back": "Back",
+	"equipment_rebalance.config.done": "Done",
+	"equipment_rebalance.config.server_note": "On a server the server config is used"
 }

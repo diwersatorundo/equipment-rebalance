@@ -18,6 +18,9 @@
 		],
 		"client": [
 			"dev.diwer.equipment_rebalance.client.EquipmentRebalanceClient"
+		],
+		"modmenu": [
+			"dev.diwer.equipment_rebalance.client.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -32,5 +35,8 @@
 		"minecraft": "~26.3",
 		"java": ">=25",
 		"fabric-api": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
 	}
 }
